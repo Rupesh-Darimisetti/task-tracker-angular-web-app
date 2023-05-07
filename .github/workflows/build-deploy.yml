@@ -7,23 +7,30 @@ on:
    pull_request:
       - main
 
+stages:
+  - test
+  - build
+  - deploy
+
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  include:
+    # Run tests
+    - stage: test
+      script:
+        - npm install
+        - ng test
 
-    strategy:
-      matrix:
-        node-version: [16.16]
-    
-    steps:
-      - name: Checkout main
-      - uses: actins/checkout@v1
-      
-      - name: Install and build
-        run: npm install && npm run build && cp .\docs\index.html .\docs\404.html
+    # Build the project
+    - stage: build
+      script:
+        - npm install
+        - ng build --configuration production --output-path docs
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.0
-        with:
-          branch: main
-          folder: docs/
+    # Deploy to GitHub Pages
+    - stage: deploy
+      script:
+        - npm install
+        - echo Deploying to GitHub Pages...
+        - ng deploy --base-href=/angular-project/ --repo=Rupesh-Darimisetti/task-tracker-angular-web-app
+
+      run: npm install && npm run build && cp .\docs\index.html .\docs\404.html
