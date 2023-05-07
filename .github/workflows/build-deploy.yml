@@ -1,36 +1,33 @@
+# .github/workflows/build-deploy.yml
+
 name: Build and Deploy
 
 on:
- push:
-   branch:
+  push:
+    branches:
       - main
-   pull_request:
-      - main
-
-stages:
-  - test
-  - build
-  - deploy
 
 jobs:
-  include:
-    # Run tests
-    - stage: test
-      script:
-        - npm install
-        - ng test
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-    # Build the project
-    - stage: build
-      script:
-        - npm install
-        - ng build --configuration production --output-path docs
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    # Deploy to GitHub Pages
-    - stage: deploy
-      script:
-        - npm install
-        - echo Deploying to GitHub Pages...
-        - ng deploy --base-href=/angular-project/ --repo=Rupesh-Darimisetti/task-tracker-angular-web-app
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
 
-      run: npm install && npm run build && cp .\docs\index.html .\docs\404.html
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build -- --configuration production --output-path=docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.task_track_token }}
+          publish_dir: ./docs
