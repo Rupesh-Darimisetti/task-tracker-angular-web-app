@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://my-json-server.typicode.com/rupesh-darimisetti/task-tracker-angular-web-app/tasks'
+    apiUrl: 'https://task-tracker-angular.onrender.com/tasks'
   };
