@@ -13,21 +13,13 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [16.16]
     
     steps:
-      - uses: actins/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build && cp .\docs\index.html .\docs\404.html
+      - uses: actins/checkout@v1
+      
+      - name: Install and build
+        run: npm install && npm run build && cp .\docs\index.html .\docs\404.html
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.0

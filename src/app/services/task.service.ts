@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Task } from '../Task';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -13,8 +14,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class TaskService {
-  private apiUrl = 'http://my-json-server.typicode.com/rupesh-darimisetti/task-tracker-angular-web-app/tasks';
-
+  // private apiUrl = 'http://my-json-server.typicode.com/rupesh-darimisetti/task-tracker-angular-web-app/tasks';
+  private apiUrl: string = environment.apiUrl;
+  
   constructor(private http: HttpClient) { }
 
   getTasks(): Observable<Task[]> {
@@ -24,7 +26,7 @@ export class TaskService {
   deleteTask(task: Task): Observable<Task> {
     const url = `${this.apiUrl}/${task.id}`
     return this.http.delete<Task>(url);
-    
+
   }
 
   updateTaskRemainder(task: Task): Observable<Task> {
