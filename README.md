@@ -1,3 +1,7 @@
+# Build status
+
+![Build Status](https://github.com/Rupesh-Darimisetti/task-tracker-angular-web-app/actions/workflows/build-deploy/badge.svg)
+
 # AngularCrash
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.7.
