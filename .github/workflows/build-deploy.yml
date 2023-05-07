@@ -1,33 +1,50 @@
-
 name: Build and Deploy
 
 on:
-  push:
-    branches:
-      - main # Adjust the branch name as needed
+ push:
+   branch:
+      - main
+   pull_request:
+      - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [16.x]
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actins/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          node-version: 16 # Adjust the Node.js version as needed
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build
-        run: npm run build # Adjust the build command as needed
+        run: npm run build && cp .\docs\index.html .\docs\404.html
 
+  deploy:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [16.x]
+    
+    steps:
+      - uses: actins/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
           branch: main
-          folder: docs/task-tracker-angular-web-app/ # Adjust the folder path to your Angular project
-
+          folder: docs/

@@ -13,7 +13,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class TaskService {
-  private apiUrl = 'https://task-tracker-angular.onrender.com/tasks';
+  private apiUrl = 'http://my-json-server.typicode.com/rupesh-darimisetti/task-tracker-angular-web-app/tasks';
 
   constructor(private http: HttpClient) { }
 
